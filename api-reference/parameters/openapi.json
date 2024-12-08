@@ -1,0 +1,208 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Anchored Hosting API",
+    "description": "Interacting with your Anchored Hosting services can be done from our API.",
+    "license": {
+      "name": "MIT"
+    },
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://anchored.host/api"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/os": {
+      "get": {
+        "summary": "Retrieve OSes",
+        "description": "Fetches a list of operating systems and their associated templates. Optional query parameter `group` can be used to filter by group ID.",
+        "parameters": [
+          {
+            "name": "group",
+            "in": "query",
+            "description": "Filter OS by group ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with OS data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "OSes retrieved successfully!"
+                    },
+                    "os": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "ubuntu"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Ubuntu"
+                          },
+                          "image": {
+                            "type": "string",
+                            "format": "uri",
+                            "example": "https://anchored.host/media/ubuntu-24.04.png"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "LINUX"
+                          },
+                          "templates": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer",
+                                  "example": 103
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "example": "Ubuntu"
+                                },
+                                "version": {
+                                  "type": "string",
+                                  "example": "24.04"
+                                },
+                                "variant": {
+                                  "type": "string",
+                                  "example": "LTS"
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2024-10-12T16:05:12.676Z"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2024-11-04T04:51:04.670Z"
+                                },
+                                "uefi": {
+                                  "type": "boolean",
+                                  "example": false
+                                },
+                                "cloud_init": {
+                                  "type": "boolean",
+                                  "example": true
+                                },
+                                "format": {
+                                  "type": "string",
+                                  "example": "qcow2"
+                                },
+                                "architecture": {
+                                  "type": "string",
+                                  "example": "x86_64"
+                                },
+                                "groupId": {
+                                  "type": "string",
+                                  "example": "ubuntu"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Validation failed"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "example": [
+                              "group"
+                            ]
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Invalid input"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Failed to process request."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

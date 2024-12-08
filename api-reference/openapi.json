@@ -1,16 +1,13 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
+    "title": "Anchored Hosting API",
+    "description": "Interacting with your Anchored Hosting services can be done from our API.",
+    "version": "0.1.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "http://anchored.host/api"
     }
   ],
   "security": [
@@ -19,36 +16,37 @@
     }
   ],
   "paths": {
-    "/plants": {
+    "/os": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "summary": "Retrieve OSes",
+        "description": "Fetches a list of operating systems and their associated templates. Optional query parameter `group` can be used to filter by group ID.",
         "parameters": [
           {
-            "name": "limit",
+            "name": "group",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "description": "Filter OS by group ID",
+            "required": false,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Successful response with OS data",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Plant"
+                    "$ref": "#/components/schemas/OS"
                   }
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
+            "description": "Validation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -56,35 +54,9 @@
                 }
               }
             }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
           },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
+          "500": {
+            "description": "Server error",
             "content": {
               "application/json": {
                 "schema": {
@@ -96,28 +68,103 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
+    "/plans": {
+      "get": {
+        "summary": "Retrieve Plans",
+        "description": "Fetches a list of plans sorted by memory in ascending order.",
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Successful response with plans data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Plans retrieved successfully!"
+                    },
+                    "plans": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Plan"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locations": {
+      "get": {
+        "summary": "Retrieve Locations",
+        "description": "Fetches a list of all available locations.",
+        "responses": {
+          "200": {
+            "description": "Successful response with locations data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Locations retrieved successfully!"
+                    },
+                    "locations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Location"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
             "content": {
               "application/json": {
                 "schema": {
@@ -132,55 +179,178 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "OS": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "id": {
+            "type": "string",
+            "example": "ubuntu"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "name": {
+            "type": "string",
+            "example": "Ubuntu"
+          },
+          "image": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://w7.pngwing.com/pngs/503/133/png-transparent-ubuntu-plain-logo-icon-thumbnail.png"
+          },
+          "type": {
+            "type": "string",
+            "example": "LINUX"
+          },
+          "templates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Template"
+            }
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "Template": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 103
           },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
+          "name": {
+            "type": "string",
+            "example": "Ubuntu"
+          },
+          "version": {
+            "type": "string",
+            "example": "24.04"
+          },
+          "variant": {
+            "type": "string",
+            "example": "LTS"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-10-12T16:05:12.676Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-11-04T04:51:04.670Z"
+          },
+          "uefi": {
+            "type": "boolean",
+            "example": false
+          },
+          "cloud_init": {
+            "type": "boolean",
+            "example": true
+          },
+          "format": {
+            "type": "string",
+            "example": "qcow2"
+          },
+          "architecture": {
+            "type": "string",
+            "example": "x86_64"
+          },
+          "groupId": {
+            "type": "string",
+            "example": "ubuntu"
           }
-        ]
+        }
+      },
+      "Plan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "budget-2c-4gb"
+          },
+          "name": {
+            "type": "string",
+            "example": "Small"
+          },
+          "description": {
+            "type": "string",
+            "example": "Perfect for small projects and websites."
+          },
+          "shared": {
+            "type": "boolean",
+            "example": true
+          },
+          "threads": {
+            "type": "integer",
+            "example": 2
+          },
+          "memory": {
+            "type": "integer",
+            "example": 4096
+          },
+          "memoryUnit": {
+            "type": "string",
+            "example": "MB"
+          },
+          "storage": {
+            "type": "integer",
+            "example": 20
+          },
+          "storageUnit": {
+            "type": "string",
+            "example": "GB"
+          },
+          "bandwidth": {
+            "type": "integer",
+            "example": 2000
+          },
+          "bandwidthUnit": {
+            "type": "string",
+            "example": "GB"
+          },
+          "price": {
+            "type": "integer",
+            "example": 500
+          }
+        }
+      },
+      "Location": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "dallas"
+          },
+          "name": {
+            "type": "string",
+            "example": "United States"
+          }
+        }
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
         "type": "object",
         "properties": {
           "error": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "example": "Validation failed"
           },
-          "message": {
-            "type": "string"
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "group"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid input"
+                }
+              }
+            }
           }
         }
       }

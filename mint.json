@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Documentation",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -18,12 +18,12 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "https://anchored.host/support"
     }
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "url": "https://anchored.host/dashboard"
   },
   "tabs": [
     {
@@ -33,19 +33,14 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
+      "name": "Articles",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://anchored.host/articles"
+    },
+    {
+      "name": "Discord",
+      "icon": "discord",
+      "url": "https://mintlify.com/community"
     }
   ],
   "navigation": [
@@ -75,17 +70,18 @@
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Server Parameters",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "api-reference/parameters/os",
+        "api-reference/parameters/plans",
+        "api-reference/parameters/locations"
       ]
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://linkedin.com/company/mintlify"
+    "youtube": "https://youtube.com/@anchoredhost",
+    "x": "https://x.com/anchoredhost",
+    "github": "https://github.com/anchored-host",
+    "linkedin": "https://linkedin.com/company/96629810"
   }
 }
